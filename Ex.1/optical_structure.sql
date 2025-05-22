@@ -16,26 +16,26 @@ CREATE TABLE supplier (
     name VARCHAR(100) NOT NULL,
     nif VARCHAR(20) UNIQUE,
     address_id INT,
-    FOREIGN KEY (address_id) REFERENCES address(id)
+    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL
 );
 
 
 CREATE TABLE customer (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
+    name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
     email VARCHAR(100) UNIQUE,
     registration_date DATE,
     referred_by INT,
     address_id INT,
-    FOREIGN KEY (referred_by) REFERENCES customer(id),
-    FOREIGN KEY (address_id) REFERENCES address(id)
+    FOREIGN KEY (referred_by) REFERENCES customer(id) ON DELETE SET NULL,
+    FOREIGN KEY (address_id) REFERENCES address(id) ON DELETE SET NULL
 );
 
 
 CREATE TABLE employee (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
+    name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
     email VARCHAR(100)
 );
@@ -43,7 +43,7 @@ CREATE TABLE employee (
 
 CREATE TABLE glasses (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    brand VARCHAR(50),
+    brand VARCHAR(50) NOT NULL,
     left_lens_grade VARCHAR(10),
     right_lens_grade VARCHAR(10),
     frame_type ENUM('rimless', 'plastic', 'metal'),
@@ -52,7 +52,7 @@ CREATE TABLE glasses (
     right_lens_color VARCHAR(30),
     price DECIMAL(8,2),
     supplier_id INT,
-    FOREIGN KEY (supplier_id) REFERENCES supplier(supplier_id)
+    FOREIGN KEY (supplier_id) REFERENCES supplier(supplier_id) ON DELETE SET NULL
 );
 
 
@@ -62,9 +62,9 @@ CREATE TABLE sale (
     customer_id INT,
     employee_id INT,
     glasses_id INT,
-    FOREIGN KEY (customer_id) REFERENCES customer(id),
-    FOREIGN KEY (employee_id) REFERENCES employee(id),
-    FOREIGN KEY (glasses_id) REFERENCES glasses(id)
+    FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE SET NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(id) ON DELETE SET NULL,
+    FOREIGN KEY (glasses_id) REFERENCES glasses(id) ON DELETE SET NULL
 );
 
 INSERT INTO address (street, street_number, floor, door, city, postal_code, country) VALUES

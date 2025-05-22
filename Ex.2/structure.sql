@@ -8,7 +8,7 @@ CREATE TABLE province (
 CREATE TABLE city (
     city_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    province_id INT,
+    province_id INT NOT NULL,
     FOREIGN KEY (province_id) REFERENCES province(province_id)
 );
 
@@ -18,9 +18,9 @@ CREATE TABLE customer (
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     address VARCHAR(255) NOT NULL,
-    postal_code VARCHAR(10),
+    postal_code VARCHAR(10) NOT NULL,
     phone_number VARCHAR(20),
-    city_id INT,
+    city_id INT NOT NULL,
     FOREIGN KEY (city_id) REFERENCES city(city_id)
 );
 
@@ -28,7 +28,7 @@ CREATE TABLE customer (
 CREATE TABLE store (
     store_id INT AUTO_INCREMENT PRIMARY KEY,
     address VARCHAR(255) NOT NULL,
-    postal_code VARCHAR(10),
+    postal_code VARCHAR(10) NOT NULL,
     city_id INT,
     FOREIGN KEY (city_id) REFERENCES city(city_id)
 );
@@ -36,12 +36,12 @@ CREATE TABLE store (
 -- Empleados
 CREATE TABLE employee (
     employee_id INT AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(100),
-    last_name VARCHAR(100),
-    nif VARCHAR(20) UNIQUE,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    nif VARCHAR(20) UNIQUE NOT NULL,
     phone_number VARCHAR(20),
     role ENUM('cook', 'delivery') NOT NULL,
-    store_id INT,
+    store_id INT NOT NULL,
     FOREIGN KEY (store_id) REFERENCES store(store_id)
 );
 
@@ -55,31 +55,31 @@ CREATE TABLE pizza_category (
 CREATE TABLE product (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    description TEXT,
-    image_url VARCHAR(255),
+    description TEXT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
     price DECIMAL(8,2) NOT NULL,
     type ENUM('pizza', 'burger', 'drink') NOT NULL,
-    category_id INT,
+    category_id INT NOT NULL,
     FOREIGN KEY (category_id) REFERENCES pizza_category(category_id)
 );
 
 -- Pedidos
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_datetime DATETIME,
+    order_datetime DATETIME NOT NULL,
     delivery_type ENUM('delivery', 'pickup') NOT NULL,
-    total_price DECIMAL(10,2),
-    customer_id INT,
-    store_id INT,
+    total_price DECIMAL(10,2) NOT NULL,
+    customer_id INT NOT NULL,
+    store_id INT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id),
     FOREIGN KEY (store_id) REFERENCES store(store_id)
 );
 
 -- Productos por pedido
 CREATE TABLE order_product (
-    order_id INT,
-    product_id INT,
-    quantity INT,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
     PRIMARY KEY (order_id, product_id),
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (product_id) REFERENCES product(product_id)
@@ -88,9 +88,9 @@ CREATE TABLE order_product (
 -- Entregas (solo para pedidos de tipo 'delivery')
 CREATE TABLE delivery (
     delivery_id INT AUTO_INCREMENT PRIMARY KEY,
-    order_id INT UNIQUE,
+    order_id INT NOT NULL UNIQUE,
     delivery_employee_id INT NOT NULL,
-    delivery_datetime DATETIME,
+    delivery_datetime DATETIME NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (delivery_employee_id) REFERENCES employee(employee_id)
 );
